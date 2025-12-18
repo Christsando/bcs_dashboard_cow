@@ -61,61 +61,8 @@
                     </div>
                     <x-search-bar-list />
                 </div>
-                <x-table-list-data />
+                <x-table-list-data :bcsData="$bcsData"/>
             </div>
-
-            <!-- Pagination -->
-            @if (isset($bcsData) && $bcsData->count() > 0)
-                <div class="mt-6 flex items-center justify-between">
-                    <div class="text-sm text-gray-600">
-                        Menampilkan {{ $bcsData->firstItem() ?? 0 }} hingga {{ $bcsData->lastItem() ?? 0 }} dari
-                        {{ $bcsData->total() }} data
-                    </div>
-
-                    @if ($bcsData->hasPages())
-                        <div class="flex items-center gap-2">
-                            <!-- Previous Button -->
-                            @if ($bcsData->onFirstPage())
-                                <button disabled class="p-2 text-gray-300 cursor-not-allowed">
-                                    <i class="fa-solid fa-chevron-left"></i>
-                                </button>
-                            @else
-                                <a href="{{ $bcsData->previousPageUrl() }}"
-                                    class="p-2 text-gray-600 hover:text-gray-900 transition">
-                                    <i class="fa-solid fa-chevron-left"></i>
-                                </a>
-                            @endif
-
-                            <!-- Page Numbers -->
-                            @foreach ($bcsData->getUrlRange(1, $bcsData->lastPage()) as $page => $url)
-                                @if ($page == $bcsData->currentPage())
-                                    <button disabled
-                                        class="px-3 py-2 text-sm font-semibold text-white bg-blue-600 rounded cursor-not-allowed">
-                                        {{ $page }}
-                                    </button>
-                                @else
-                                    <a href="{{ $url }}"
-                                        class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition">
-                                        {{ $page }}
-                                    </a>
-                                @endif
-                            @endforeach
-
-                            <!-- Next Button -->
-                            @if ($bcsData->hasMorePages())
-                                <a href="{{ $bcsData->nextPageUrl() }}"
-                                    class="p-2 text-gray-600 hover:text-gray-900 transition">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </a>
-                            @else
-                                <button disabled class="p-2 text-gray-300 cursor-not-allowed">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </button>
-                            @endif
-                        </div>
-                    @endif
-                </div>
-            @endif
         </div>
     </div>
 </x-app-layout>

@@ -3,7 +3,7 @@
         <div class="flex flex-row justify-between items-center">
             <div>
                 <p class="text-xs text-basicfont mb-1">
-                    Pages / {{ __('Detail') }} / [TAG_ID_SAPI]
+                    Pages / {{ __('Detail') }} / {{ $cow->tag_id }}
                 </p>
                 <h1 class="text-3xl font-bold text-darkblue">
                     {{ __('Detail') }}
@@ -82,21 +82,21 @@
                 <div class="bg-white p-4 rounded-lg lg:col-span-2">
                     <div>
                         <h1 class="text-lg font-bold text-darkblue">
-                            Body Condition Score - Classification
+                            Body Condition Score - Image
                         </h1>
                         <p class="text-xs text-basicfont mb-1">
                             Today - Body Condition Score (BCS) Summary
                         </p>
                     </div>
                     <div class="h-[310px] lg:h-86 flex items-center justify-center"> {{-- Fixed height on mobile, dynamic on desktop --}}
-                        <img alt="Placeholder Cow Image" class="h-48 w-48">
+                        <img src="{{ asset($cow->cow_img_path) }}" alt="Placeholder Cow Image" class="h-48 w-48">
                     </div>
                 </div>
             </div>
             <div class="bg-white h-[320px] rounded-lg lg:col-span-2">
                 <div class="pl-4 pt-4">
                     <h1 class="text-lg font-bold text-darkblue">
-                        [ID_SAPI] - Condition
+                        {{ $cow->tag_id }} - Condition
                     </h1>
                     <p class="text-xs text-basicfont mb-1">
                         Today - Body Condition Score (BCS) Summary
@@ -105,37 +105,33 @@
                 <div class="flex flex-col px-4"> {{-- Fixed height on mobile, dynamic on desktop --}}
                     <div class="pt-4 flex flex-row gap-6 items-center">
                         <i class="fa-solid fa-circle fa-2x"></i>
-                        
+
                         <div>
                             <p class="text-sm font-semibold text-darkblue">Body Condition Score (BCS)</p>
                             <p class="text-xs text-basicfont">Today - [DD/MM/YYYY]</p>
                         </div>
 
-                        <p  class="text-sm font-semibold text-darkblue"> : 1 (Score) </p>
+                        <p class="text-sm font-semibold text-darkblue"> : {{ $latestBCS->bcs_score ?? '-' }} (Body
+                            Condition Score) </p>
                     </div>
 
                     <div class="pt-4 flex flex-row gap-6 items-center">
                         <i class="fa-solid fa-circle fa-2x"></i>
-                        
+
                         <div>
                             <p class="text-sm font-semibold text-darkblue">Need Attention</p>
                             <p class="text-xs text-basicfont">Today - [DD/MM/YYYY]</p>
                         </div>
 
-                        <p  class="text-sm font-semibold text-darkblue"> : 1 (Score) </p>
+                        <p class="text-sm font-semibold text-darkblue"> : </p>
                     </div>
 
                     <div class="pt-4 flex flex-col gap-2">
                         <p class="text-lg font-bold text-darkblue">Note :</p>
                         {{-- ganti by data nanti --}}
-                        <p  class="text-sm text-basicfont">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, 
-                            consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
-                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur 
-                            adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
-                            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-                        </p>
+                        <textarea name="notes" rows="3"
+                            class="w-full rounded-lg border border-gray-300 p-3 text-sm text-basicfont focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
+                            placeholder="Tulis catatan kondisi sapi di sini...">{{ old('notes', $latestBCS->notes ?? '') }}</textarea>
                     </div>
                 </div>
             </div>

@@ -1,32 +1,23 @@
-const detailConditionScoreCtx = document.getElementById('detailConditionScoreChart').getContext('2d');
-const detailConditionScoreChart = new Chart(detailConditionScoreCtx, {
-    type: 'line',
+const conditionScoreCtx = document.getElementById('conditionScoreChart').getContext('2d');
+const conditionScoreChart = new Chart(conditionScoreCtx, {
+    type: 'bar', // <-- ubah line jadi bar
     data: {
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         datasets: [{
             label: 'Body Condition Score',
-            data: [1, 1, 2, 2, 4, 5, 4, 5, 4, 4, 3, 3],
-            borderColor: '#4318FF',
-            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-            tension: 0.3,
-            fill: true,
-            pointBackgroundColor: '#4318FF',
-            pointBorderColor: '#fff',
-            pointBorderWidth: 2,
-            pointRadius: 4,
-            pointHoverRadius: 6
+            data: [], // kosongkan data, biar dinamis dari backend
+            backgroundColor: '#4318FF', // warna batang
+            borderRadius: 6, // biar rounded
+            maxBarThickness: 30
         }]
     },
     options: {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-            // symbols
             legend: {
                 display: false
             },
-
-            // onhover effect
             tooltip: {
                 callbacks: {
                     label: function (context) {
@@ -59,3 +50,12 @@ const detailConditionScoreChart = new Chart(detailConditionScoreCtx, {
         }
     }
 });
+
+fetch('/bcs-chart-data')
+    .then(res => res.json())
+    .then(data => {
+        const monthlyScores = data.monthly_scores;
+
+        conditionScoreChart.data.datasets[0].data = monthlyScores;
+        conditionScoreChart.update();
+    });

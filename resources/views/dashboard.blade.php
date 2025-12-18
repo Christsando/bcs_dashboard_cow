@@ -74,22 +74,29 @@
                             Today - Body Condition Score (BCS) Summary
                         </p>
                     </div>
-                    <div class="h-[310px] lg:h-86 flex items-center justify-center"> {{-- Fixed height on mobile, dynamic on desktop --}}
+                    <div class="h-[310px] lg:h-86 flex items-center justify-center">
                         <canvas id="classificationPieChart"></canvas>
                     </div>
                 </div>
             </div>
             <div class="bg-white rounded-lg lg:col-span-2">
-                <div class="pl-4 pt-4">
-                    <h1 class="text-lg font-bold text-darkblue">
-                        Body Condition Score - Details
-                    </h1>
-                    <p class="text-xs text-basicfont mb-1">
-                        Today - Body Condition Score (BCS) Summary
-                    </p>
+                <div class="px-4 pt-4 flex justify-between items-center">
+                    <div>
+                        <h1 class="text-lg font-bold text-darkblue">
+                            Body Condition Score - Lists
+                        </h1>
+                        <p class="text-xs text-basicfont mb-1">
+                            Today - Body Condition Score (BCS) Summary
+                        </p>
+                    </div>
+                    <div>
+                        <x-primary-button class="bg-inactiveblue hover:bg-activeblue">
+                            <i class="fas fa-plus mr-2"></i> {{ __('Add') }}
+                        </x-primary-button>
+                    </div>
                 </div>
-                <div class="h-[310px] lg:h-86 flex items-center justify-center"> {{-- Fixed height on mobile, dynamic on desktop --}}
-                    <x-table-list-dashboard-data/>
+                <div class="h-[320px] lg:h-86">
+                    <x-table-list-dashboard-data :bcsData="$bcsData" />
                 </div>
             </div>
         </div>

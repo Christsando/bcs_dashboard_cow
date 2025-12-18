@@ -17,7 +17,7 @@
         <!-- Scripts -->
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/charts/linechart_dashboard.js', 'resources/js/charts/piechart_dashboard.js'])
+        @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/charts/linechart_dashboard.js', 'resources/js/charts/piechart_dashboard.js', 'resources/js/charts/barchart_dashboard.js'])
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-softblue" x-data>
