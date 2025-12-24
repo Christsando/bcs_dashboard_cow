@@ -14,6 +14,7 @@ class Cow extends Model
         'cow_img_path',
         // 'tgl_lahir',
         // 'jenis_kelamin',
+        'image_source'
     ];
 
     public function bcs()

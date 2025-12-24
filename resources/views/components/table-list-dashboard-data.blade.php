@@ -9,6 +9,7 @@
                     <th class="border-b p-2 text-left">Tag ID Sapi</th>
                     <th class="border-b p-2 text-left">BCS Score</th>
                     <th class="border-b p-2 text-left">Perhatian Khusus</th>
+                    <th class="border-b p-2 text-left">Tanggal Pengecekan</th>
                 </tr>
             </thead>
 
@@ -30,6 +31,9 @@
                                 <option value="1">Butuh Perhatian Khusus</option>
                                 <option value="2">Sangat Butuh Perhatian Khusus</option>
                             </select>
+                        </td>
+                        <td class="p-4 text-sm">
+                            {{ $item->assessment_date }}
                         </td>
                     </tr>
                 @empty

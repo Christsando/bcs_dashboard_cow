@@ -11,65 +11,70 @@ class ClassifyCow extends Controller
 {
     public function classifyBCS(Request $request)
     {
+        // Validasi
         $request->validate([
             'image' => 'required|image|max:5120',
-            'tag_id' => 'required',
-            'tgl_lahir' => 'required',
-            'jenis_kelamin' => 'required',
+            // 'tag_id' => 'string|max:255',
         ]);
 
-        // 1. Simpan gambar ke storage
-        $imagePath = $request->file('image')->store('cows', 'public');
+        try {
+            // 1. Simpan gambar ke storage
+            $imagePath = $request->file('image')->store('cows', 'public');
 
-        // 2. Kirim gambar ke FastAPI
-        $response = Http::attach(
-            'file',
-            fopen($request->file('image')->getPathname(), 'r'),
-            $request->file('image')->getClientOriginalName()
-        )->post('http://127.0.0.1:8001/predict');
+            // 2. Kirim gambar ke FastAPI
+            $response = Http::attach(
+                'file',
+                fopen($request->file('image')->getPathname(), 'r'),
+                $request->file('image')->getClientOriginalName()
+            )->post('http://127.0.0.1:8001/predict');
 
-        if ($response->failed()) {
-            return response()->json([
-                'error' => 'FastAPI error',
-                'details' => $response->json()
-            ], 500);
+            // Cek response FastAPI
+            if ($response->failed()) {
+                return redirect()->back()
+                    ->withErrors(['error' => 'FastAPI gagal memproses gambar. Pastikan server berjalan.'])
+                    ->withInput();
+            }
+
+            $result = $response->json();
+
+            $timestamp = now()->format('YmdHis');
+            $num = rand(100, 999);
+            $tagId = "COW-{$timestamp}{$num}";
+
+            // 3. Simpan data cow
+            $cow = Cow::create([
+                'tag_id' => $tagId,
+                'cow_img_path' => $imagePath,
+                'image_source'=> "upload",
+            ]);
+
+            // 4. Simpan hasil BCS
+            $bcs = BodyConditionScore::create([
+                'cow_id' => $cow->id,
+                'bcs_score' => $result['predicted_class'],
+                'assessment_date' => now(),
+                'notes' => 'Prediksi otomatis dari model FastAPI'
+            ]);
+
+            // 5. Redirect dengan success message
+            return redirect()->back()->with(
+                'success',
+                "Data berhasil disimpan! Tag ID: {$cow->tag_id} | BCS Score: {$bcs->bcs_score}"
+            );
+        } catch (\Exception $e) {
+            // Handle error
+            return redirect()->back()
+                ->withErrors(['error' => 'Terjadi kesalahan: ' . $e->getMessage()])
+                ->withInput();
         }
-
-        $result = $response->json();
-
-        // 3. Simpan data cow
-        $cow = Cow::create([
-            'tag_id' => $request->tag_id,
-            'cow_img_path' => $imagePath,
-            'tgl_lahir' => $request->tgl_lahir,
-            'jenis_kelamin' => $request->jenis_kelamin,
-        ]);
-
-        // 4. Simpan hasil BCS
-        BodyConditionScore::create([
-            'cow_id' => $cow->id,
-            'bcs_score' => $result['predicted_class'],
-            'assessment_date' => now(),
-            'notes' => 'Prediksi otomatis dari model FastAPI'
-        ]);
-
-        // 5. Response ke frontend
-        return response()->json([
-            'message' => 'Data sapi dan hasil BCS berhasil disimpan!',
-            'cow' => $cow,
-            'bcs_result' => $result,
-        ]);
     }
-
 
     public function chartData()
     {
         // Ambil semua data BCS
         $bcs = BodyConditionScore::select('bcs_score', 'assessment_date')->get();
 
-        // ==========================
-        // 1) BAR CHART → rata-rata BCS per bulan
-        // ==========================
+        // BAR CHART → rata-rata BCS per bulan
         $monthlyScores = array_fill(0, 12, 0);
         $monthlyCounts = array_fill(0, 12, 0);
 
@@ -86,19 +91,13 @@ class ClassifyCow extends Controller
                 : 0;
         }
 
-        // ==========================
-        // 2) PIE CHART → jumlah BCS 1-5
-        // ==========================
-        $distribution = [
-            1 => 0,
-            2 => 0,
-            3 => 0,
-            4 => 0,
-            5 => 0
-        ];
+        // PIE CHART → jumlah BCS 1-5
+        $distribution = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
 
         foreach ($bcs as $item) {
-            $distribution[$item->bcs_score]++;
+            if (isset($distribution[$item->bcs_score])) {
+                $distribution[$item->bcs_score]++;
+            }
         }
 
         return response()->json([

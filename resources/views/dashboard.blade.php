@@ -43,12 +43,58 @@
                         </form>
                     </div>
                 </div>
-
             </div>
         </div>
     </x-slot>
 
-    <div class="py-4">
+    {{-- Tambahkan x-data di sini --}}
+    <div class="py-4" x-data="{ openAddModal: false }">
+
+        {{-- Success Message --}}
+        @if (session('success'))
+            <div class="px-6 mb-4">
+                <div
+                    class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative flex items-center gap-2">
+                    <i class="fas fa-check-circle"></i>
+                    <span>{{ session('success') }}</span>
+                    <button onclick="this.parentElement.remove()"
+                        class="absolute right-4 text-green-700 hover:text-green-900">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        @endif
+
+        {{-- Error Message --}}
+        @if (session('error'))
+            <div class="px-6 mb-4">
+                <div
+                    class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative flex items-center gap-2">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>{{ session('error') }}</span>
+                    <button onclick="this.parentElement.remove()"
+                        class="absolute right-4 text-red-700 hover:text-red-900">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        @endif
+
+        {{-- Validation Errors --}}
+        @if ($errors->any())
+            <div class="px-6 mb-4">
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative">
+                    <i class="fas fa-exclamation-circle mr-2"></i>
+                    <strong>Terjadi kesalahan:</strong>
+                    <ul class="mt-2 list-disc list-inside">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        @endif
+
         <div class="px-6 -mt-2">
             <div class="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-4">
                 <div class="bg-white p-4 rounded-lg lg:col-span-3">
@@ -60,7 +106,7 @@
                             Today - Body Condition Score (BCS) Summary
                         </p>
                     </div>
-                    <div class="h-[310px] lg:h-86"> {{-- Fixed height on mobile, dynamic on desktop --}}
+                    <div class="h-[310px] lg:h-86">
                         <canvas id="conditionScoreChart"></canvas>
                     </div>
                 </div>
@@ -79,8 +125,9 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-white rounded-lg lg:col-span-2">
-                <div class="px-4 pt-4 flex justify-between items-center">
+
+            <div class="bg-white p-4 rounded-lg lg:col-span-2">
+                <div class="flex justify-between items-center">
                     <div>
                         <h1 class="text-lg font-bold text-darkblue">
                             Body Condition Score - Lists
@@ -90,8 +137,9 @@
                         </p>
                     </div>
                     <div>
-                        <x-primary-button class="bg-inactiveblue hover:bg-activeblue">
-                            <i class="fas fa-plus mr-2"></i> {{ __('Add') }}
+                        <x-primary-button class="bg-inactiveblue"
+                            @click="$dispatch('open-modal', 'add-bcs-modal')">
+                            <i class="fas fa-plus mr-2"></i> Add
                         </x-primary-button>
                     </div>
                 </div>
@@ -100,5 +148,8 @@
                 </div>
             </div>
         </div>
+
+        {{-- Modal Component (taruh di sini, di dalam div x-data) --}}
+        <x-add-data-modal-form :show="$errors->any()" />
     </div>
 </x-app-layout>

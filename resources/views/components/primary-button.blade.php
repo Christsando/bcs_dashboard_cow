@@ -10,7 +10,7 @@
     text-white 
     uppercase 
     tracking-widest 
-    hover:bg-gray-700 
+    hover:bg-gray-700
     focus:bg-gray-700 
     active:bg-gray-900 
     focus:outline-none 

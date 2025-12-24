@@ -33,6 +33,7 @@ class CowSeeder extends Seeder
                 $data[] = [
                     'tag_id' => "COW-{$timestamp}{$num}",
                     'cow_img_path' => $relativePath,
+                    'image_source' => "dataset",
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];

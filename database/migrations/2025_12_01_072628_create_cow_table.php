@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('tag_id')->unique();
             $table->string('cow_img_path')->nullable();
+            $table->string('image_source');
             $table->timestamps();
         });
     }

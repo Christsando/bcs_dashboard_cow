@@ -75,7 +75,7 @@
                         </p>
                     </div>
                     <div class="h-[310px] lg:h-86"> {{-- Fixed height on mobile, dynamic on desktop --}}
-                        <canvas id="conditionScoreChart"></canvas>
+                        <canvas id="detailConditionScoreChart"></canvas>
                     </div>
                 </div>
 
@@ -88,9 +88,20 @@
                             Today - Body Condition Score (BCS) Summary
                         </p>
                     </div>
-                    <div class="h-[310px] lg:h-86 flex items-center justify-center"> {{-- Fixed height on mobile, dynamic on desktop --}}
+                    {{-- <div class="h-[310px] lg:h-86 flex items-center justify-center">
                         <img src="{{ asset($cow->cow_img_path) }}" alt="Placeholder Cow Image" class="h-48 w-48">
+                    </div> --}}
+                    @php
+                        $imageUrl =
+                            $cow->image_source === 'dataset'
+                                ? asset($cow->cow_img_path)
+                                : Storage::url($cow->cow_img_path);
+                    @endphp
+
+                    <div class="h-[310px] lg:h-86 flex items-center justify-center">
+                        <img src="{{ $imageUrl }}" class="h-48 w-48 object-cover" alt="Cow Image">
                     </div>
+
                 </div>
             </div>
             <div class="bg-white h-[320px] rounded-lg lg:col-span-2">
@@ -128,12 +139,31 @@
 
                     <div class="pt-4 flex flex-col gap-2">
                         <p class="text-lg font-bold text-darkblue">Note :</p>
-                        {{-- ganti by data nanti --}}
-                        <textarea name="notes" rows="3"
-                            class="w-full rounded-lg border border-gray-300 p-3 text-sm text-basicfont focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
-                            placeholder="Tulis catatan kondisi sapi di sini...">{{ old('notes', $latestBCS->notes ?? '') }}</textarea>
+
+                        @if ($latestBCS)
+                            <form action="{{ route('bcs.notes.update', $latestBCS->id) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+
+                                <textarea name="notes" rows="3"
+                                    class="w-full rounded-lg border border-gray-300 p-3 text-sm text-basicfont focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
+                                    placeholder="Tulis catatan kondisi sapi di sini...">{{ old('notes', $latestBCS->notes) }}</textarea>
+
+                                <button type="submit"
+                                    class="mt-2 px-4 py-2 bg-red-500 text-white rounded-lg text-sm hover:bg-red-600">
+                                    Save Notes
+                                </button>
+                            </form>
+                        @else
+                            <p class="text-sm text-gray-500">Belum ada data BCS</p>
+                        @endif
                     </div>
+
                 </div>
             </div>
         </div>
 </x-app-layout>
+
+<script>
+    window.COW_ID = {{ $cow->id }};
+</script>

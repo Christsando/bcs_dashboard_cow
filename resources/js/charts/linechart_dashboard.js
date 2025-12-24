@@ -5,7 +5,7 @@ const detailConditionScoreChart = new Chart(detailConditionScoreCtx, {
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         datasets: [{
             label: 'Body Condition Score',
-            data: [1, 1, 2, 2, 4, 5, 4, 5, 4, 4, 3, 3],
+            data: [],
             borderColor: '#4318FF',
             backgroundColor: 'rgba(59, 130, 246, 0.1)',
             tension: 0.3,
@@ -59,3 +59,11 @@ const detailConditionScoreChart = new Chart(detailConditionScoreCtx, {
         }
     }
 });
+
+fetch(`/bcs-chart-data/${window.COW_ID}`)
+    .then(res => res.json())
+    .then(data => {
+        detailConditionScoreChart.data.labels = data.labels;
+        detailConditionScoreChart.data.datasets[0].data = data.scores;
+        detailConditionScoreChart.update();
+    });
