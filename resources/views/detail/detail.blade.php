@@ -122,8 +122,7 @@
                             <p class="text-xs text-basicfont">Today - [DD/MM/YYYY]</p>
                         </div>
 
-                        <p class="text-sm font-semibold text-darkblue"> : {{ $latestBCS->bcs_score ?? '-' }} (Body
-                            Condition Score) </p>
+                        <p class="text-sm font-semibold text-darkblue"> : {{ $latestBCS->bcs_score ?? '-' }} (BodyCondition Score) </p>
                     </div>
 
                     <div class="pt-4 flex flex-row gap-6 items-center">

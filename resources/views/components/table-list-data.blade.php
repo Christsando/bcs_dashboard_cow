@@ -27,10 +27,17 @@
                             BCS {{ $item->bcs_score }}
                         </td>
                         <td class="p-4 text-sm">
-                            <select class="border rounded px-2 py-1 text-sm">
-                                <option value="0">Tidak Butuh</option>
-                                <option value="1">Butuh Perhatian Khusus</option>
-                                <option value="2">Sangat Butuh Perhatian Khusus</option>
+                            <select class="border rounded px-2 py-1 text-sm attention-select"
+                                data-id="{{ $item->id }}">
+                                <option value="0" {{ $item->attention == 0 ? 'selected' : '' }}>
+                                    Tidak Butuh
+                                </option>
+                                <option value="1" {{ $item->attention == 1 ? 'selected' : '' }}>
+                                    Butuh Perhatian Khusus
+                                </option>
+                                <option value="2" {{ $item->attention == 2 ? 'selected' : '' }}>
+                                    Sangat Butuh Perhatian Khusus
+                                </option>
                             </select>
                         </td>
                         <td class="p-4 text-sm">
@@ -60,3 +67,26 @@
         {{ $bcsData->links() }}
     </div>
 </div>
+
+<script>
+document.querySelectorAll('.attention-select').forEach(select => {
+    select.addEventListener('change', function () {
+        const attention = this.value;
+        const id = this.dataset.id;
+
+        fetch(`/bcs/${id}/attention`, {
+            method: 'PATCH',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ attention })
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log('Saved', data);
+        })
+        .catch(err => console.error(err));
+    });
+});
+</script>

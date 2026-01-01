@@ -17,6 +17,8 @@ return new class extends Migration
             $table->date('assessment_date');
             $table->text('notes')->nullable();
             $table->foreignId('cow_id')->constrained('cows')->onDelete('cascade');
+            $table->tinyInteger('attention')->comment('0: tidak, 1: butuh, 2: sangat butuh')->nullable();
+            // based on option drop down
             $table->timestamps();
         });
     }

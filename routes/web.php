@@ -7,6 +7,7 @@ use App\Http\Controllers\ListController;
 use App\Http\Controllers\DetailController;
 use App\Http\Controllers\ClassifyCow;
 use Illuminate\Support\Facades\Route;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 // Guest routes
 Route::get('/', fn() => view('auth.login'));
@@ -31,6 +32,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     
     // Detail controller
     Route::put('/body-condition-score/{bcs}/notes',[DetailController::class, 'update'])->name('bcs.notes.update');
+
+    // Data options
+    Route::patch('/bcs/{id}/attention', [DashboardController::class, 'updateAttention']);
 
     // Profile routes
     Route::prefix('profile')->name('profile.')->group(function () {
