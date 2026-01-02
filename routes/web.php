@@ -28,7 +28,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     
     // Chart Data API (internal - dipanggil dari Blade)
     Route::get('/bcs-chart-data', [ClassifyCow::class, 'chartData'])->name('bcs.chartData');
-    Route::get('/bcs-chart-data/{cow}', [DetailController::class, 'chartDataByCow'])->name('bcs.chartDataByCow');
+    Route::get('/bcs-chart-data/{cow}', [DetailController::class, 'chartData']);
     
     // Detail controller
     Route::put('/body-condition-score/{bcs}/notes',[DetailController::class, 'update'])->name('bcs.notes.update');

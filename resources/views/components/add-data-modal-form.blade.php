@@ -47,6 +47,7 @@
                 <input type="file" name="image" class="hidden"
                     @change="previewImage($event)" required>
             </label>
+            <x-input-error :messages="$errors->get('image')" class="mt-2" />
         </div>
 
         {{-- Buttons --}}

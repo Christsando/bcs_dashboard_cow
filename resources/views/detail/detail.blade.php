@@ -104,7 +104,7 @@
 
                 </div>
             </div>
-            <div class="bg-white h-[320px] rounded-lg lg:col-span-2">
+            <div class="bg-white h-[410px] lg:h-[375px] rounded-lg lg:col-span-2">
                 <div class="pl-4 pt-4">
                     <h1 class="text-lg font-bold text-darkblue">
                         {{ $cow->tag_id }} - Condition
@@ -119,7 +119,7 @@
 
                         <div>
                             <p class="text-sm font-semibold text-darkblue">Body Condition Score (BCS)</p>
-                            <p class="text-xs text-basicfont">Today - [DD/MM/YYYY]</p>
+                            <p class="text-xs text-basicfont">Today - {{ $latestBCS->assessment_date }}</p>
                         </div>
 
                         <p class="text-sm font-semibold text-darkblue"> : {{ $latestBCS->bcs_score ?? '-' }} (BodyCondition Score) </p>
@@ -130,10 +130,10 @@
 
                         <div>
                             <p class="text-sm font-semibold text-darkblue">Need Attention</p>
-                            <p class="text-xs text-basicfont">Today - [DD/MM/YYYY]</p>
+                            <p class="text-xs text-basicfont">Today - {{ $latestBCS->assessment_date }}</p>
                         </div>
 
-                        <p class="text-sm font-semibold text-darkblue"> : </p>
+                        <p class="text-sm font-semibold text-darkblue"> : {{ $latestBCS->attention_text ?? '-' }}</p>
                     </div>
 
                     <div class="pt-4 flex flex-col gap-2">

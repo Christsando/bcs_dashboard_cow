@@ -15,6 +15,10 @@ class ClassifyCow extends Controller
         $request->validate([
             'image' => 'required|image|max:5120',
             // 'tag_id' => 'string|max:255',
+        ], [
+            'image.max' => 'Ukuran gambar terlalu besar. Maksimal 5MB.',
+            'image.uploaded' => 'Ukuran gambar terlalu besar. Maksimal 5MB.',
+            'image.image' => 'File harus berupa gambar.',
         ]);
 
         try {
@@ -45,7 +49,7 @@ class ClassifyCow extends Controller
             $cow = Cow::create([
                 'tag_id' => $tagId,
                 'cow_img_path' => $imagePath,
-                'image_source'=> "upload",
+                'image_source' => "upload",
             ]);
 
             // 4. Simpan hasil BCS

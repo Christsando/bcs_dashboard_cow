@@ -13,6 +13,7 @@ class BodyConditionScore extends Model
         'bcs_score',
         'assessment_date',
         'notes',
+        'attention',
     ];
 
     public function cow()
@@ -25,5 +26,15 @@ class BodyConditionScore extends Model
         return self::with('cow')
             ->latest()
             ->paginate($perPage);
+    }
+
+    public function getAttentionTextAttribute()
+    {
+        return match ($this->attention) {
+            0 => 'Tidak Butuh Perhatian',
+            1 => 'Butuh Perhatian Khusus',
+            2 => 'Sangat Butuh Perhatian Khusus',
+            default => '-',
+        };
     }
 }
